@@ -17,8 +17,8 @@ def list_vms():
     results = {}
 
     for pid in pids:
-        cmdline = open("/proc/%s/cmdline", "r")
-        results[pid] = re.findall(r"-name([^\-]+)-", cmdline.readline(), re.U | re.I)[0]
+        cmdline = open("/proc/%s/cmdline" % pid, "r")
+        results[pid] = re.findall(r"-name\x00?([^\-\x00]+)\x00?-", cmdline.readline(), re.U | re.I)[0]
         cmdline.close()
 
     list_vms._results = results
@@ -35,12 +35,15 @@ def init_cpu(data=None):
 
 def read_cpu(data=None):
     collectd.debug("Reading: " + repr(data))
-    m1 = collectd.Values()
-    m1.plugin = "cpu_kvm"
-    m1.type = "value"
-    m1.values = [100]
-    m1.host = "kvm_instance1.example.org"
-    m1.dispatch()
+    for pid, host in list_vms():
+        M = collectd.Values()
+        # rrd/kvm_HOST/cpu_kvm/value.rrd
+        M.host = "kvm_" + host
+        M.plugin = "cpu_kvm"
+        M.type = "value"
+        (user, system) = open("/proc/%s/stat" % pid, 'r').readline().split(' ')[13:15]
+        M.values = [int(user) + int(system)]
+        M.dispatch()
 
 
 collectd.register_config(config_cpu)
