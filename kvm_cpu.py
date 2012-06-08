@@ -36,11 +36,10 @@ def init_cpu(data=None):
 def read_cpu(data=None):
     collectd.debug("Reading: " + repr(data))
     for pid, host in list_vms().items():
-        M = collectd.Values()
+        M = collectd.Values("gauge")
         # rrd/kvm_HOST/cpu_kvm/value.rrd
         M.host = "kvm_" + host
         M.plugin = "cpu_kvm"
-        M.type = "value"
         (user, system) = open("/proc/%s/stat" % pid, 'r').readline().split(' ')[13:15]
         M.values = [int(user) + int(system)]
         M.dispatch()
