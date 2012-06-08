@@ -35,7 +35,7 @@ def init_cpu(data=None):
 
 def read_cpu(data=None):
     collectd.debug("Reading: " + repr(data))
-    for pid, host in list_vms():
+    for pid, host in list_vms().items():
         M = collectd.Values()
         # rrd/kvm_HOST/cpu_kvm/value.rrd
         M.host = "kvm_" + host
