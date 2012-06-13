@@ -5,6 +5,7 @@ import re
 
 def discover(all_vms=True):
     # TODO: maybe read from /var/run/ganeti/kvm-hypervisor/pid/*?
+    # TODO: beware of /run and /var/run differencies
     kvm = Popen("pidof kvm", shell=True, stdout=PIPE)
     pids = kvm.communicate()[0].split()
 

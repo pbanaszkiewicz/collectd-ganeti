@@ -1,28 +1,6 @@
-from subprocess import Popen, PIPE
-import re
+# coding: utf-8
 import collectd
-
-
-def list_vms():
-    # TODO: maybe read from /var/run/ganeti/kvm-hypervisor/pid/*?
-    kvm = Popen("pidof kvm", shell=True, stdout=PIPE)
-    pids = kvm.communicate()[0].split()
-
-    try:
-        if set(list_vms._results.keys()) == set(pids):
-            return list_vms._results
-    except AttributeError:
-        pass
-
-    results = {}
-
-    for pid in pids:
-        cmdline = open("/proc/%s/cmdline" % pid, "r")
-        results[pid] = re.findall(r"-name\x00?([^\-\x00]+)\x00?-", cmdline.readline(), re.U | re.I)[0]
-        cmdline.close()
-
-    list_vms._results = results
-    return results
+from discover_vm import discover
 
 
 def config_cpu(data=None):
@@ -35,13 +13,15 @@ def init_cpu(data=None):
 
 def read_cpu(data=None):
     collectd.debug("Reading: " + repr(data))
-    for pid, host in list_vms().items():
+    for pid, host in discover().items():
         M = collectd.Values("gauge")
-        # rrd/kvm_HOST/cpu_kvm/value.rrd
+        # rrd/kvm_HOST/cpu_kvm/gauge.rrd
         M.host = "kvm_" + host
         M.plugin = "cpu_kvm"
+        # import os
+        # os.sysconf("SC_CLK_TCK")
         (user, system) = open("/proc/%s/stat" % pid, 'r').readline().split(' ')[13:15]
-        M.values = [int(user) + int(system)]
+        M.values = [(int(user) + int(system)) / 1000.]  # might be < 100, just trying
         M.dispatch()
 
 
