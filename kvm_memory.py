@@ -4,17 +4,22 @@ import os
 from discover_vm import discover
 
 
-def config_cpu(data=None):
+def config_memory(data=None):
     # TODO: make configuration option to choose between quick (rough) and slow
     #       (exact) estimation
     collectd.debug("Configuration: " + repr(data))
 
 
-def init_cpu(data=None):
+PAGESIZE = 0
+
+
+def init_memory(data=None):
+    global PAGESIZE
     collectd.debug("Initialization: " + repr(data))
+    PAGESIZE = os.sysconf("SC_PAGE_SIZE") / 1024.  # KiB?
 
 
-def read_cpu(data=None):
+def read_memory(data=None):
     collectd.debug("Reading: " + repr(data))
     for pid, host in discover().items():
         # /var/lib/collectd/rrd/kvm_HOST/memory_kvm/bytes.rrd
@@ -29,7 +34,6 @@ def read_cpu(data=None):
         statm.close()
         statm = s
 
-        PAGESIZE = os.sysconf("SC_PAGE_SIZE") / 1024.  # KiB?
         shared = int(statm[2]) * PAGESIZE
         Rss = int(statm[1]) * PAGESIZE
         private = Rss - shared
@@ -37,6 +41,6 @@ def read_cpu(data=None):
         M.dispatch()
 
 
-collectd.register_config(config_cpu)
-collectd.register_init(init_cpu)
-collectd.register_read(read_cpu)
+collectd.register_config(config_memory)
+collectd.register_init(init_memory)
+collectd.register_read(read_memory)
