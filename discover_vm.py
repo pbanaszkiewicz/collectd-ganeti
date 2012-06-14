@@ -13,7 +13,7 @@ def discover():
     results = {}
     for vm in os.listdir(path):
         vm_path = os.path.join(path, vm)
-        results[vm] = int(open(vm_path, "r").readline().strip())
+        results[open(vm_path, "r").readline().strip()] = vm
 
     return results
     #kvm = Popen("pidof kvm", shell=True, stdout=PIPE)
