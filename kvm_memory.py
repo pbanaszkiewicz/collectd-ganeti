@@ -24,7 +24,8 @@ PAGESIZE = 0
 def init_memory(data=None):
     global PAGESIZE
     collectd.debug("Initialization: " + repr(data))
-    PAGESIZE = os.sysconf("SC_PAGE_SIZE") / 1024.  # KiB?
+    #PAGESIZE = os.sysconf("SC_PAGE_SIZE") / 1024.  # KiB?
+    PAGESIZE = os.sysconf("SC_PAGE_SIZE")  # bytes?
 
 
 def read_memory(data=None):
@@ -58,7 +59,7 @@ def read_memory(data=None):
             if pss > 0:
                 shared = pss - private
 
-            M.values = [int(private) + int(shared)]
+            M.values = [1024 * (int(private) + int(shared))]
 
         else:
             # rough, but quick estimate

@@ -1,11 +1,16 @@
 # coding: utf-8
-#from subprocess import Popen, PIPE
-#import re
 import os
 import os.path
 
 
 def discover():
+    """
+    Returns a list of actually running KVM virtual machines and their pids in
+    this manner:
+        result[pid] = vm_name
+    """
+    # TODO: add Xen discovery
+
     path = "/var/run/ganeti/kvm-hypervisor/pid"
     if os.path.exists("/run"):
         path = "/run/ganeti/kvm-hypervisor/pid"
@@ -16,25 +21,6 @@ def discover():
         results[open(vm_path, "r").readline().strip()] = vm
 
     return results
-    #kvm = Popen("pidof kvm", shell=True, stdout=PIPE)
-    #pids = kvm.communicate()[0].split()
-
-    #try:
-    #    if set(discover._results.keys()) == set(pids):
-    #        return discover._results
-    #except AttributeError:
-    #    pass
-
-    #results = {}
-
-    #for pid in pids:
-    #    cmdline = open("/proc/%s/cmdline" % pid, "r")
-    #    results[pid] = re.findall(r"-name\x00?([^\-\x00]+)\x00?-",
-    #                              cmdline.readline(), re.U | re.I)[0]
-    #    cmdline.close()
-
-    #discover._results = results
-    #return results
 
 if __name__ == "__main__":
     print discover()
