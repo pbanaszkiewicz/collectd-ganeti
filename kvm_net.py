@@ -25,7 +25,7 @@ def read_net(data=None):
         # /var/lib/collectd/rrd/kvm_HOST/net_kvm_out/gauge.rrd
         M_out = collectd.Values("counter")
         M_out.host = "kvm_" + host
-        M_out.plugout = "net_kvm_out"
+        M_out.plugin = "net_kvm_out"
 
         for line in open("/proc/net/dev", "r"):
             if nics[0] in line:
