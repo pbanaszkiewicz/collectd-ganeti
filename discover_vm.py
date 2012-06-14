@@ -6,9 +6,9 @@ import os.path
 
 
 def discover():
-    path = "/var/run/ganeti/kvm-hypervisor"
+    path = "/var/run/ganeti/kvm-hypervisor/pid"
     if os.path.exists("/run"):
-        path = "/run/ganeti/kvm-hypervisor"
+        path = "/run/ganeti/kvm-hypervisor/pid"
 
     results = {}
     for vm in os.listdir(path):
