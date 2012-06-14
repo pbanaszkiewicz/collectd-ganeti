@@ -59,7 +59,7 @@ def read_memory(data=None):
             if pss > 0:
                 shared = pss - private
 
-            M.values = [1024 * (int(private) + int(shared))]
+            M.values = [1024 * int(private + shared)]  # in bytes
 
         else:
             # rough, but quick estimate

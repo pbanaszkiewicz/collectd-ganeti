@@ -15,13 +15,32 @@ def read_cpu(data=None):
     collectd.debug("Reading: " + repr(data))
     for pid, host in discover().items():
         # /var/lib/collectd/rrd/kvm_HOST/cpu_kvm/gauge.rrd
-        M = collectd.Values("gauge")
+        M = collectd.Values("derive")  # or try "counter"
         M.host = "kvm_" + host
         M.plugin = "cpu_kvm"
         # import os
         # os.sysconf("SC_CLK_TCK")
         (user, system) = open("/proc/%s/stat" % pid, 'r').readline().split(' ')[13:15]
-        #M.values = [(int(user) + int(system)) / 1000.]  # might be < 100, just trying
+        M.values = [int(user) + int(system)]
+        M.dispatch()
+
+
+def config_cpu_wait(data=None):
+    collectd.debug("Configuration: " + repr(data))
+
+
+def init_cpu_wait(data=None):
+    collectd.debug("Initialization: " + repr(data))
+
+
+def read_cpu_wait(data=None):
+    collectd.debug("Reading: " + repr(data))
+    for pid, host in discover().items():
+        # /var/lib/collectd/rrd/kvm_HOST/cpu_wait_kvm/gauge.rrd
+        M = collectd.Values("gauge")
+        M.host = "kvm_" + host
+        M.plugin = "cpu_wait_kvm"
+        (user, system) = open("/proc/%s/stat" % pid, 'r').readline().split(' ')[15:17]
         M.values = [int(user) + int(system)]
         M.dispatch()
 
@@ -29,3 +48,6 @@ def read_cpu(data=None):
 collectd.register_config(config_cpu)
 collectd.register_init(init_cpu)
 collectd.register_read(read_cpu)
+collectd.register_config(config_cpu_wait)
+collectd.register_init(init_cpu_wait)
+collectd.register_read(read_cpu_wait)
