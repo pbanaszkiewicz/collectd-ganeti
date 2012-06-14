@@ -14,8 +14,8 @@ def init_cpu(data=None):
 def read_cpu(data=None):
     collectd.debug("Reading: " + repr(data))
     for pid, host in discover().items():
+        # /var/lib/collectd/rrd/kvm_HOST/cpu_kvm/gauge.rrd
         M = collectd.Values("gauge")
-        # rrd/kvm_HOST/cpu_kvm/gauge.rrd
         M.host = "kvm_" + host
         M.plugin = "cpu_kvm"
         # import os
