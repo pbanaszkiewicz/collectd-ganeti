@@ -15,9 +15,12 @@ def discover():
     path = os.path.join(PATH, "pid")
 
     results = {}
-    for vm in os.listdir(path):
-        vm_path = os.path.join(path, vm)
-        results[open(vm_path, "r").readline().strip()] = vm
+    try:
+        for vm in os.listdir(path):
+            vm_path = os.path.join(path, vm)
+            results[open(vm_path, "r").readline().strip()] = vm
+    except OSError:
+        pass
 
     return results
 
