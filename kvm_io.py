@@ -17,7 +17,7 @@ def read_io(data=None):
         # /var/lib/collectd/rrd/kvm_HOST/io_kvm_read/counter.rrd
         M_read = collectd.Values("counter")
         M_read.host = "kvm_" + host
-        M_read.plugread = "io_kvm_read"
+        M_read.plugin = "io_kvm_read"
         # /var/lib/collectd/rrd/kvm_HOST/io_kvm_write/counter.rrd
         M_write = collectd.Values("counter")
         M_write.host = "kvm_" + host
