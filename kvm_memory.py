@@ -31,10 +31,11 @@ def init_memory(data=None):
 def read_memory(data=None):
     collectd.debug("Reading: " + repr(data))
     for pid, host in discover().items():
-        # /var/lib/collectd/rrd/kvm_HOST/memory_kvm/bytes.rrd
+        # /var/lib/collectd/rrd/kvm_HOST/memory_kvm/memory-usage.rrd
         M = collectd.Values("bytes")
         M.host = "kvm_" + host
         M.plugin = "memory_kvm"
+        M.type_instance = "memory-usage"
 
         if os.path.exists("/proc/%s/smaps" % pid):
             # slow but probably exact estimate

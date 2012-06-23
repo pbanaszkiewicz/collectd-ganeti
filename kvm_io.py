@@ -14,14 +14,15 @@ def init_io(data=None):
 def read_io(data=None):
     collectd.debug("Reading: " + repr(data))
     for pid, host in discover().items():
-        # /var/lib/collectd/rrd/kvm_HOST/io_kvm_read/counter.rrd
+        # /var/lib/collectd/rrd/kvm_HOST/io_kvm/io-{read,write}.rrd
         M_read = collectd.Values("counter")
         M_read.host = "kvm_" + host
-        M_read.plugin = "io_kvm_read"
-        # /var/lib/collectd/rrd/kvm_HOST/io_kvm_write/counter.rrd
+        M_read.plugin = "io_kvm"
+        M_read.type_instance = "io-read"
         M_write = collectd.Values("counter")
         M_write.host = "kvm_" + host
-        M_write.plugin = "io_kvm_write"
+        M_write.plugin = "io_kvm"
+        M_write.type_instance = "io-write"
 
         for line in open("/proc/%s/io" % pid, "r"):
             if "read_bytes" in line:

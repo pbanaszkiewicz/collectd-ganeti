@@ -18,14 +18,15 @@ def read_net(data=None):
         if len(nics) < 1:
             continue
 
-        # /var/lib/collectd/rrd/kvm_HOST/net_kvm_in/counter.rrd
+        # /var/lib/collectd/rrd/kvm_HOST/net_kvm/net-{in,out}.rrd
         M_in = collectd.Values("counter")
         M_in.host = "kvm_" + host
-        M_in.plugin = "net_kvm_in"
-        # /var/lib/collectd/rrd/kvm_HOST/net_kvm_out/counter.rrd
+        M_in.plugin = "net_kvm"
+        M_in.type_instance = "net-in"
         M_out = collectd.Values("counter")
         M_out.host = "kvm_" + host
-        M_out.plugin = "net_kvm_out"
+        M_out.plugin = "net_kvm"
+        M_out.type_instance = "net-out"
 
         for line in open("/proc/net/dev", "r"):
             if nics[0] in line:
