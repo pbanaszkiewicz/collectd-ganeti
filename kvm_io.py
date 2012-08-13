@@ -18,11 +18,11 @@ def read_io(data=None):
         M_read = collectd.Values("counter")
         M_read.host = "kvm_" + host
         M_read.plugin = "io_kvm"
-        M_read.type_instance = "io-read"
+        M_read.type_instance = "io_read"
         M_write = collectd.Values("counter")
         M_write.host = "kvm_" + host
         M_write.plugin = "io_kvm"
-        M_write.type_instance = "io-write"
+        M_write.type_instance = "io_write"
 
         for line in open("/proc/%s/io" % pid, "r"):
             if "read_bytes" in line:

@@ -22,11 +22,11 @@ def read_net(data=None):
         M_in = collectd.Values("counter")
         M_in.host = "kvm_" + host
         M_in.plugin = "net_kvm"
-        M_in.type_instance = "net-in"
+        M_in.type_instance = "net_in"
         M_out = collectd.Values("counter")
         M_out.host = "kvm_" + host
         M_out.plugin = "net_kvm"
-        M_out.type_instance = "net-out"
+        M_out.type_instance = "net_out"
 
         for line in open("/proc/net/dev", "r"):
             if nics[0] in line:

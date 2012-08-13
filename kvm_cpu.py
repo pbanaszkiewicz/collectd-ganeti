@@ -18,7 +18,7 @@ def read_cpu(data=None):
         M = collectd.Values("derive")  # or try "counter"
         M.host = "kvm_" + host
         M.plugin = "cpu_kvm"
-        M.type_instance = "cpu-usage"
+        M.type_instance = "cpu_usage"
         # import os
         # os.sysconf("SC_CLK_TCK")
         (user, system) = open("/proc/%s/stat" % pid, 'r').readline().split(' ')[13:15]
@@ -41,7 +41,7 @@ def read_cpu_wait(data=None):
         M = collectd.Values("gauge")
         M.host = "kvm_" + host
         M.plugin = "cpu_kvm"
-        M.type_instance = "cpu-wait"
+        M.type_instance = "cpu_wait"
         (user, system) = open("/proc/%s/stat" % pid, 'r').readline().split(' ')[15:17]
         M.values = [int(user) + int(system)]
         M.dispatch()

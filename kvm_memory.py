@@ -35,7 +35,7 @@ def read_memory(data=None):
         M = collectd.Values("bytes")
         M.host = "kvm_" + host
         M.plugin = "memory_kvm"
-        M.type_instance = "memory-usage"
+        M.type_instance = "memory_usage"
 
         if os.path.exists("/proc/%s/smaps" % pid):
             # slow but probably exact estimate
